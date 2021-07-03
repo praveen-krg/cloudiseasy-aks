@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello
+spec:
+  template:
+    # This is the pod template
+    spec:
+      containers:
+      - name: hello
+        image: busybox
+        command: ['sh', '-c', 'echo "Hello, Kubernetes!" && sleep 60']
+      restartPolicy: OnFailure
+      initContainers:
+      - name: init-busybox
+        image: busybox
+        command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done']
